@@ -1,16 +1,16 @@
 package model;
 
+import controller.ControllerInterface;
 import static model.BoardSpaceState.*;
 
 /**
  *
  * @author jay-to-the-dee <jay-to-the-dee@users.noreply.github.com>
  */
-public class Board
+public class Board implements ModelInterface
 {
-    public final static int BOARDSIZE = 8;
-    
-    BoardSpace[][] board;
+    private ControllerInterface controller;
+    private BoardSpace[][] board;
 
     public Board()
     {
@@ -28,13 +28,22 @@ public class Board
 
     private void addStartingDisks()
     {
-        addDisk(BOARDSIZE / 2, BOARDSIZE / 2, WHITE);
-        addDisk((BOARDSIZE / 2) - 1, (BOARDSIZE / 2) - 1, WHITE);
+        final int halfBoardSize = (BOARDSIZE / 2) + 1;
 
-        addDisk((BOARDSIZE / 2) - 1, BOARDSIZE / 2, BLACK);
-        addDisk(BOARDSIZE / 2, (BOARDSIZE / 2) - 1, BLACK);
+        addDisk(halfBoardSize, halfBoardSize, WHITE);
+        addDisk(halfBoardSize - 1, halfBoardSize - 1, WHITE);
+
+        addDisk(halfBoardSize - 1, halfBoardSize, BLACK);
+        addDisk(halfBoardSize, halfBoardSize - 1, BLACK);
     }
 
+    @Override
+    public void setController(ControllerInterface controller)
+    {
+        this.controller = controller;
+    }
+
+    @Override
     public void addDisk(int X, int Y, BoardSpaceState colour)
     {
         if (isOutOfBounds(X, Y))
@@ -52,7 +61,7 @@ public class Board
     }
 
     /**
-     * Gets the disk object for the specified co-ordinate
+     * Gets the disk object for the specified coordinate
      * WARNING: Calling functions should check with either doesDiskExist
      * before calling this method or check for null value from this method
      * before operating on returned Disk object!
@@ -61,6 +70,7 @@ public class Board
      * @param Y
      * @return null if no disk at position specified, Disk object otherwise
      */
+    @Override
     public BoardSpace getDisk(int X, int Y)
     {
         if (isOutOfBounds(X, Y))
@@ -73,14 +83,15 @@ public class Board
         }
     }
 
-    public static boolean isOutOfBounds(int X, int Y)
-    {
-        return (X <= 0 || X > BOARDSIZE || Y <= 0 || Y > BOARDSIZE);
-    }
-
+    @Override
     public boolean doesDiskExist(int X, int Y)
     {
         return board[X - 1][Y - 1].getCurrentState() != EMPTY;
+    }
+
+    public static boolean isOutOfBounds(int X, int Y)
+    {
+        return (X <= 0 || X > BOARDSIZE || Y <= 0 || Y > BOARDSIZE);
     }
 
     @Override

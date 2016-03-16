@@ -1,7 +1,7 @@
 package view;
 
+import controller.Controller;
 import model.*;
-import static model.BoardSpaceState.*;
 
 /**
  *
@@ -9,18 +9,17 @@ import static model.BoardSpaceState.*;
  */
 public class Reversi
 {
-
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args)
+    public static void main(String[] args) throws Exception
     {
-        Board board = new Board();
+        ModelInterface model = new Board(); //This is our Model
+        GUI view = new GUI(); //This is our View
         
-        board.addDisk(5, 3, WHITE);
-        board.getDisk(4, 3).flipDisk();
+        //This controller will link everything together
+        Controller controller = new Controller(model, view);
         
-        System.out.print(board);
+        view.showAndRun();
     }
-    
 }
