@@ -3,6 +3,7 @@ package view;
 import java.awt.*;
 import javax.swing.*;
 import model.ModelInterface;
+import static view.PlayerEnum.*;
 
 /**
  *
@@ -11,7 +12,7 @@ import model.ModelInterface;
 class GameFrame
 {
     private final ModelInterface model;
-    private PlayerEnum player;
+    private final PlayerEnum player;
 
     private final JFrame frame;
     private JLabel statusLabel;
@@ -30,6 +31,7 @@ class GameFrame
         addContents(frame.getContentPane());
 
         frame.pack();
+        setFrameLocation();
         frame.setVisible(true);
     }
 
@@ -44,5 +46,24 @@ class GameFrame
         AIButton = new JButton("Greedy AI (Play " + player + ")");
         contentPane.add(AIButton, BorderLayout.SOUTH);
 
+    }
+
+    private void setFrameLocation()
+    {
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        final int screenHeight = screenSize.height;
+        final int screenWidth = screenSize.width;
+
+        final int X = screenWidth / 2;
+        final int Y = screenHeight / 2 - frame.getHeight() / 2;
+
+        if (player == WHITE_PLAYER) //White player goes to left of screen
+        {
+            frame.setLocation(X - frame.getWidth(), Y);
+        }
+        else
+        {
+            frame.setLocation(X, Y);
+        }
     }
 }
