@@ -1,6 +1,6 @@
 package view;
 
-import controller.Controller;
+import controller.*;
 import model.*;
 
 /**
@@ -12,13 +12,13 @@ public class Reversi
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) throws Exception
+    public static void main(String[] args)
     {
         ModelInterface model = new Board(); //This is our Model
-        GUI view = new GUI(); //This is our View
+        ViewInterface view = new GUI(); //This is our View
                 
         //This controller will link everything together
-        Controller controller = new Controller(model, view);
+        ControllerInterface controller = new Controller(model, view);
         
         view.showAndRun();
     }

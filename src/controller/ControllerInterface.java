@@ -1,7 +1,7 @@
 package controller;
 
 import model.ModelInterface;
-import view.GUI;
+import view.ViewInterface;
 
 /**
  *
@@ -10,5 +10,5 @@ import view.GUI;
 public interface ControllerInterface
 {
     public ModelInterface getModel();
-    public GUI getView();
+    public ViewInterface getView();
 }

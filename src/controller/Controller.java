@@ -1,7 +1,7 @@
 package controller;
 
 import model.ModelInterface;
-import view.GUI;
+import view.ViewInterface;
 
 /**
  *
@@ -10,9 +10,9 @@ import view.GUI;
 public class Controller implements ControllerInterface
 {
     ModelInterface model;
-    GUI view;
+    ViewInterface view;
 
-    public Controller(ModelInterface model, GUI view)
+    public Controller(ModelInterface model, ViewInterface view)
     {
         this.model = model;
         this.view = view;
@@ -28,10 +28,8 @@ public class Controller implements ControllerInterface
     }
 
     @Override
-    public GUI getView()
+    public ViewInterface getView()
     {
         return view;
     }
-    
-    
 }

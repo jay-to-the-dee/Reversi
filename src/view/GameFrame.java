@@ -13,7 +13,7 @@ class GameFrame
     private final ModelInterface model;
     private PlayerEnum player;
 
-    private JFrame frame;
+    private final JFrame frame;
     private JLabel statusLabel;
     private JPanel gamePanel;
     private JButton AIButton;

@@ -7,7 +7,7 @@ import static view.PlayerEnum.*;
  *
  * @author jay-to-the-dee <jay-to-the-dee@users.noreply.github.com>
  */
-public class GUI
+public class GUI implements ViewInterface
 {
     private ControllerInterface controller;
             
@@ -19,7 +19,8 @@ public class GUI
         this.controller = controller;
     }
 
-    public void showAndRun() throws Exception
+    @Override
+    public void showAndRun()
     {
         if (controller != null)
         {
@@ -29,7 +30,7 @@ public class GUI
         else
         {
             //This should never happen (in theory)
-            throw new Exception("Controller not set before GUI startup!");
+            throw new RuntimeException("Controller not set before GUI startup!");
         }
     }
 }
