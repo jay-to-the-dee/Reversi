@@ -1,6 +1,6 @@
 package model;
 
-import static model.DiskState.*;
+import static model.BoardSpaceState.*;
 
 /**
  *
@@ -9,26 +9,33 @@ import static model.DiskState.*;
 public class Board
 {
     public final static int BOARDSIZE = 8;
-
-    BoardDisk[][] board;
+    
+    BoardSpace[][] board;
 
     public Board()
     {
-        board = new BoardDisk[BOARDSIZE][BOARDSIZE];
+        board = new BoardSpace[BOARDSIZE][BOARDSIZE];
+        for (int i = 0; i < board.length; i++)
+        {
+            for (int j = 0; j < board[0].length; j++)
+            {
+                board[i][j] = new BoardSpace();
+            }
+        }
 
-        setUpStartingDisks();
+        addStartingDisks();
     }
 
-    private void setUpStartingDisks()
+    private void addStartingDisks()
     {
-        board[BOARDSIZE / 2][BOARDSIZE / 2] = new BoardDisk(WHITE);
-        board[(BOARDSIZE / 2) - 1][(BOARDSIZE / 2) - 1] = new BoardDisk(WHITE);
+        addDisk(BOARDSIZE / 2, BOARDSIZE / 2, WHITE);
+        addDisk((BOARDSIZE / 2) - 1, (BOARDSIZE / 2) - 1, WHITE);
 
-        board[(BOARDSIZE / 2)][(BOARDSIZE / 2) - 1] = new BoardDisk(BLACK);
-        board[(BOARDSIZE / 2) - 1][(BOARDSIZE / 2)] = new BoardDisk(BLACK);
+        addDisk((BOARDSIZE / 2) - 1, BOARDSIZE / 2, BLACK);
+        addDisk(BOARDSIZE / 2, (BOARDSIZE / 2) - 1, BLACK);
     }
 
-    public void addDisk(int X, int Y, DiskState colour)
+    public void addDisk(int X, int Y, BoardSpaceState colour)
     {
         if (isOutOfBounds(X, Y))
         {
@@ -40,7 +47,7 @@ public class Board
         }
         else
         {
-            board[X - 1][Y - 1] = new BoardDisk(colour);
+            board[X - 1][Y - 1].setCurrentState(colour);
         }
     }
 
@@ -54,7 +61,7 @@ public class Board
      * @param Y
      * @return null if no disk at position specified, Disk object otherwise
      */
-    public BoardDisk getDisk(int X, int Y)
+    public BoardSpace getDisk(int X, int Y)
     {
         if (isOutOfBounds(X, Y))
         {
@@ -73,7 +80,7 @@ public class Board
 
     public boolean doesDiskExist(int X, int Y)
     {
-        return board[X - 1][Y - 1] != null;
+        return board[X - 1][Y - 1].getCurrentState() != EMPTY;
     }
 
     @Override
@@ -85,30 +92,14 @@ public class Board
         {
             for (int j = 0; j < board[0].length; j++)
             {
-                BoardDisk currentDisk = board[i][j];
-                if (currentDisk != null)
-                {
-                    buffer.append(currentDisk.getCurrentState());
-                }
-                else
-                {
-                    buffer.append(" ");
-                }
+                buffer.append(board[i][j].getCurrentState());
             }
             buffer.append("\n");
         }
         return buffer.toString();
     }
 
-    private abstract class BoardException extends RuntimeException
-    {
-        public BoardException(String message)
-        {
-            super(message);
-        }
-    }
-
-    private class DiskAlreadyExistsException extends BoardException
+    private class DiskAlreadyExistsException extends ModelException
     {
         public DiskAlreadyExistsException(int X, int Y)
         {
@@ -116,11 +107,12 @@ public class Board
         }
     }
 
-    private class OutOfBoundsException extends BoardException
+    private class OutOfBoundsException extends ModelException
     {
         public OutOfBoundsException(int X, int Y)
         {
             super("Co-ordinates (" + X + "," + Y + ") are outside the grid boundary!");
         }
     }
+
 }

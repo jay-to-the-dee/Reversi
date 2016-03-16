@@ -1,6 +1,7 @@
 package view;
 
 import model.*;
+import static model.BoardSpaceState.*;
 
 /**
  *
@@ -16,8 +17,8 @@ public class Reversi
     {
         Board board = new Board();
         
-        board.addDisk(1, 1, DiskState.WHITE);
-        board.getDisk(1, 1).flipDisk();
+        board.addDisk(5, 3, WHITE);
+        board.getDisk(4, 3).flipDisk();
         
         System.out.print(board);
     }

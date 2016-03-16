@@ -3,22 +3,24 @@ package model;
 import java.awt.Color;
 
 /**
- * Represents a disk being in either a black or white state
+ * Represents a board space being in either a black or white state
  * Contains some helpful extra methods too!
  * @author jay-to-the-dee <jay-to-the-dee@users.noreply.github.com>
  */
-public enum DiskState
+public enum BoardSpaceState
 {
-    BLACK, WHITE;
+    BLACK, WHITE, EMPTY;
 
-    public DiskState oppositeState()
+    public BoardSpaceState oppositeState()
     {
         switch (this)
         {
             case BLACK:
                 return WHITE;
-            default:
+            case WHITE:
                 return BLACK;
+            default:
+                return EMPTY;
         }
     }
 
@@ -28,8 +30,10 @@ public enum DiskState
         {
             case BLACK:
                 return Color.BLACK;
-            default:
+            case WHITE:
                 return Color.WHITE;
+            default:
+                return Color.GREEN;
         }
     }
 
@@ -40,8 +44,10 @@ public enum DiskState
         {
             case BLACK:
                 return "B";
-            default:
+            case WHITE:
                 return "W";
+            default:
+                return " ";
         }
     }
 }
