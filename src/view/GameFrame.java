@@ -38,7 +38,7 @@ class GameFrame
         statusLabel = new JLabel(" ");
         contentPane.add(statusLabel, BorderLayout.NORTH);
 
-        gamePanel = new BoardPanel(model);
+        gamePanel = new BoardPanel(model, player);
         contentPane.add(gamePanel, BorderLayout.CENTER);
 
         AIButton = new JButton("Greedy AI (Play " + player + ")");

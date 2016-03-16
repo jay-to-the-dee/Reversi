@@ -16,7 +16,7 @@ public class Reversi
     {
         ModelInterface model = new Board(); //This is our Model
         GUI view = new GUI(); //This is our View
-        
+                
         //This controller will link everything together
         Controller controller = new Controller(model, view);
         
