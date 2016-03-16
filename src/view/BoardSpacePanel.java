@@ -27,18 +27,22 @@ class BoardSpacePanel extends JPanel
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
 
-        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
         g2d.setColor(Color.GREEN);
         g2d.fillRect(0, 0, this.getWidth(), this.getHeight());
 
         BoardSpaceState currentState = boardSpace.getCurrentState();
-        g2d.setColor(currentState.getColor());
-        g2d.fillOval(PADDING, PADDING, this.getWidth() - PADDING * 2, this.getHeight() - PADDING * 2);
-        g2d.setColor(currentState.oppositeState().getColor());
-        g2d.drawOval(PADDING, PADDING, this.getWidth() - PADDING * 2, this.getHeight() - PADDING * 2);
+
+        if (currentState != BoardSpaceState.EMPTY) //Improves performance
+        {
+            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+            g2d.setColor(currentState.getColor());
+            g2d.fillOval(PADDING, PADDING, this.getWidth() - 1 - PADDING * 2, this.getHeight() - 1 - PADDING * 2);
+            g2d.setColor(currentState.oppositeState().getColor());
+            g2d.drawOval(PADDING, PADDING, this.getWidth() - 1 - PADDING * 2, this.getHeight() - 1 - PADDING * 2);
+        }
 
         g2d.setColor(Color.BLACK);
-        g2d.drawRect(0, 0, this.getWidth(), this.getHeight());
+        g2d.drawRect(0, 0, this.getWidth() - 1, this.getHeight() - 1);
     }
 }
