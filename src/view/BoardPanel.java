@@ -6,7 +6,7 @@ import model.ModelInterface;
 import static view.PlayerEnum.*;
 
 /**
- *
+ * This class set's up and contains our BoardSpacePanel's 
  * @author jay-to-the-dee <jay-to-the-dee@users.noreply.github.com>
  */
 class BoardPanel extends JPanel

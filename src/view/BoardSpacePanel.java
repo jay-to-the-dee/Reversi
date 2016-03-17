@@ -5,7 +5,7 @@ import javax.swing.JPanel;
 import model.*;
 
 /**
- *
+ * This panel shows a single Reversi disk (or an empty space) 
  * @author jay-to-the-dee <jay-to-the-dee@users.noreply.github.com>
  */
 class BoardSpacePanel extends JPanel

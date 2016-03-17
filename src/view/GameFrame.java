@@ -6,7 +6,7 @@ import model.ModelInterface;
 import static view.PlayerEnum.*;
 
 /**
- *
+ * This is basically one of JFrame, with all the stuff we want inside as well
  * @author jay-to-the-dee <jay-to-the-dee@users.noreply.github.com>
  */
 class GameFrame
