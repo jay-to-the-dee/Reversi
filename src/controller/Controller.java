@@ -1,6 +1,7 @@
 package controller;
 
 import model.ModelInterface;
+import view.PlayerEnum;
 import view.ViewInterface;
 
 /**
@@ -12,13 +13,17 @@ public class Controller implements ControllerInterface
     ModelInterface model;
     ViewInterface view;
 
+    private PlayerEnum currentPlayer;
+
     public Controller(ModelInterface model, ViewInterface view)
     {
         this.model = model;
         this.view = view;
-        
+
         model.setController(this);
         view.setController(this);
+
+        currentPlayer = PlayerEnum.WHITE_PLAYER;
     }
 
     @Override
@@ -31,5 +36,14 @@ public class Controller implements ControllerInterface
     public ViewInterface getView()
     {
         return view;
+    }
+
+    public void mainGameLoop()
+    {
+        do
+        {
+            currentPlayer = currentPlayer.oppositePlayer();
+        }
+        while (true);
     }
 }

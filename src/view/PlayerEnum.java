@@ -2,9 +2,10 @@ package view;
 
 /**
  * Use this to distinguish Black player and White player in our view
+ *
  * @author jay-to-the-dee <jay-to-the-dee@users.noreply.github.com>
  */
-enum PlayerEnum
+public enum PlayerEnum
 {
     BLACK_PLAYER, WHITE_PLAYER;
 
@@ -17,6 +18,18 @@ enum PlayerEnum
                 return "Black";
             case WHITE_PLAYER:
                 return "White";
+        }
+        return null;
+    }
+
+    public PlayerEnum oppositePlayer()
+    {
+        switch (this)
+        {
+            case BLACK_PLAYER:
+                return WHITE_PLAYER;
+            case WHITE_PLAYER:
+                return BLACK_PLAYER;
         }
         return null;
     }
