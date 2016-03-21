@@ -1,8 +1,8 @@
 package controller;
 
-import model.ModelInterface;
-import view.PlayerEnum;
-import view.ViewInterface;
+import javax.swing.JOptionPane;
+import model.*;
+import view.*;
 
 /**
  *
@@ -23,7 +23,7 @@ public class Controller implements ControllerInterface
         model.setController(this);
         view.setController(this);
 
-        currentPlayer = PlayerEnum.WHITE_PLAYER;
+        currentPlayer = PlayerEnum.BLACK_PLAYER;
     }
 
     @Override
@@ -38,12 +38,40 @@ public class Controller implements ControllerInterface
         return view;
     }
 
-    public void mainGameLoop()
+    @Override
+    public synchronized void mainGameLoop()
     {
         do
         {
             currentPlayer = currentPlayer.oppositePlayer();
+            view.updateCurrentPlayer(currentPlayer);
+
+            //We're waiting for user to place disk here here
+            try
+            {
+                this.wait();
+            }
+            catch (InterruptedException ex)
+            {
+                //Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
-        while (true);
+        while (!model.isBoardFull());
+
+        //TODO: Game has ended here - report winner etc.
+        JOptionPane.showMessageDialog(null, "Game over - TODO WINNER HERE", "Game over!", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    public void recievePlayerDiskAdd(int X, int Y, PlayerEnum player)
+    {
+        try
+        {
+            model.addDisk(X, Y, player.getPlayersDisk());
+        }
+        catch (ModelException e) //TODO: Controller exceptions should be handled here too
+        {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Invalid move", JOptionPane.WARNING_MESSAGE);
+        }
+        view.updateCurrentPlayer(currentPlayer);
     }
 }

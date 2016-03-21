@@ -1,17 +1,18 @@
 package view;
 
+import controller.ControllerInterface;
 import java.awt.*;
 import javax.swing.*;
-import model.ModelInterface;
 import static view.PlayerEnum.*;
 
 /**
  * This is basically one of JFrame, with all the stuff we want inside as well
+ *
  * @author jay-to-the-dee <jay-to-the-dee@users.noreply.github.com>
  */
 class GameFrame
 {
-    private final ModelInterface model;
+    private final ControllerInterface controller;
     private final PlayerEnum player;
 
     private final JFrame frame;
@@ -19,9 +20,9 @@ class GameFrame
     private JPanel gamePanel;
     private JButton AIButton;
 
-    public GameFrame(ModelInterface model, PlayerEnum player)
+    public GameFrame(ControllerInterface controller, PlayerEnum player)
     {
-        this.model = model;
+        this.controller = controller;
         this.player = player;
 
         frame = new JFrame("Reversi - " + player + " player");
@@ -40,7 +41,7 @@ class GameFrame
         statusLabel = new JLabel(" ");
         contentPane.add(statusLabel, BorderLayout.NORTH);
 
-        gamePanel = new BoardPanel(model, player);
+        gamePanel = new BoardPanel(controller, player);
         contentPane.add(gamePanel, BorderLayout.CENTER);
 
         AIButton = new JButton("Greedy AI (Play " + player + ")");
@@ -65,5 +66,20 @@ class GameFrame
         {
             frame.setLocation(X, Y);
         }
+    }
+
+    public void setThisFramesTurn(boolean myTurn)
+    {
+        if (myTurn)
+        {
+            frame.toFront();
+            frame.requestFocus();
+            statusLabel.setText(player + " player - click place to put piece");
+        }
+        else
+        {
+            statusLabel.setText(player + " player - not your turn");
+        }
+        frame.repaint();
     }
 }

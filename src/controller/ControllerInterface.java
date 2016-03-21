@@ -1,7 +1,7 @@
 package controller;
 
 import model.ModelInterface;
-import view.ViewInterface;
+import view.*;
 
 /**
  *
@@ -11,4 +11,7 @@ public interface ControllerInterface
 {
     public ModelInterface getModel();
     public ViewInterface getView();
+    
+    public void mainGameLoop();
+    public void recievePlayerDiskAdd(int X, int Y, PlayerEnum player);
 }

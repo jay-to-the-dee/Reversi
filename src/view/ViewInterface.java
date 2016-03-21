@@ -10,4 +10,6 @@ public interface ViewInterface
 {
     public void setController(ControllerInterface controller);
     public void showAndRun();
+
+    public void updateCurrentPlayer(PlayerEnum currentPlayer);
 }

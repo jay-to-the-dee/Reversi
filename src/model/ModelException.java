@@ -5,7 +5,7 @@ package model;
  * normal running, but they will be useful for development and debugging!
  * @author jay-to-the-dee <jay-to-the-dee@users.noreply.github.com>
  */
-abstract class ModelException extends RuntimeException
+public abstract class ModelException extends RuntimeException
 {
     public ModelException(String message)
     {

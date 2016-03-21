@@ -14,4 +14,5 @@ public interface ModelInterface
     public void addDisk(int X, int Y, BoardSpaceState colour);
     public BoardSpace getDisk(int X, int Y);
     public boolean doesDiskExist(int X, int Y);
+    public boolean isBoardFull();
 }
