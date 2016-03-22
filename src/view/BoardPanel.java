@@ -4,7 +4,7 @@ import controller.ControllerInterface;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import model.ModelInterface;
+import model.*;
 import static view.PlayerEnum.*;
 
 /**
@@ -15,7 +15,7 @@ import static view.PlayerEnum.*;
 class BoardPanel extends JPanel
 {
     private final ControllerInterface controller;
-    private PlayerEnum player;
+    private final PlayerEnum player;
 
     //private BoardSpacePanel[][] panels;
     public BoardPanel(ControllerInterface controller, PlayerEnum player)
@@ -34,39 +34,37 @@ class BoardPanel extends JPanel
             for (int y = 1; y <= ModelInterface.BOARDSIZE; y++)
             {
                 BoardSpacePanel panel; //TODO: Do we need our panels[i][j] reference?
+                DiskCoordinate modelCoordinate;
                 int modelX, modelY;
                 if (player == WHITE_PLAYER) //Implement 180 switch
                 {
-                    modelX = x;
-                    modelY = y;
+                    modelCoordinate = new DiskCoordinate(x, y);
                 }
                 else //This is the switched board
                 {
-                    modelX = ModelInterface.BOARDSIZE - x + 1;
-                    modelY = ModelInterface.BOARDSIZE - y + 1;
+                    modelCoordinate = new DiskCoordinate(ModelInterface.BOARDSIZE - x + 1, ModelInterface.BOARDSIZE - y + 1);
                 }
-                panel = new BoardSpacePanel(controller.getModel().getDisk(modelX, modelY));
-                panel.addMouseListener(new MouseAdapterImpl(modelX, modelY, player));
+                panel = new BoardSpacePanel(controller.getModel().getDisk(modelCoordinate));
+                panel.addMouseListener(new MouseAdapterImpl(modelCoordinate, player));
                 this.add(panel);
             }
         }
     }
     private class MouseAdapterImpl extends MouseAdapter
     {
-        private final int x;
-        private final int y;
+        private final DiskCoordinate modelCoordinate;
         private final PlayerEnum player;
 
-        public MouseAdapterImpl(int x, int y, PlayerEnum player)
+        private MouseAdapterImpl(DiskCoordinate modelCoordinate, PlayerEnum player)
         {
-            this.x = x;
-            this.y = y;
+            this.modelCoordinate = modelCoordinate;
             this.player = player;
         }
 
+        @Override
         public void mouseClicked(MouseEvent e)
         {
-            controller.recievePlayerDiskAdd(x, y, player);
+            controller.recievePlayerDiskAdd(modelCoordinate, player);
         }
     }
 

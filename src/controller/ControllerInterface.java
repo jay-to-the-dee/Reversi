@@ -1,6 +1,6 @@
 package controller;
 
-import model.ModelInterface;
+import model.*;
 import view.*;
 
 /**
@@ -13,5 +13,5 @@ public interface ControllerInterface
     public ViewInterface getView();
     
     public void mainGameLoop();
-    public void recievePlayerDiskAdd(int X, int Y, PlayerEnum player);
+    public void recievePlayerDiskAdd(DiskCoordinate coordinate, PlayerEnum player);
 }

@@ -24,11 +24,11 @@ public class FlipQueue
         this.model = model;
         this.startingDisk = startingDisk;
         this.player = player;
-        this.queues = new HashMap();
+        this.queues = new HashMap<>();
 
         for (SearchDirectionsEnum currentSearchDirection : SearchDirectionsEnum.values())
         {
-            this.queues.put(currentSearchDirection, new ArrayDeque());
+            this.queues.put(currentSearchDirection, new ArrayDeque<>());
         }
 
         doQueueGeneration();
@@ -44,12 +44,12 @@ public class FlipQueue
                 Queue<DiskCoordinate> relevantQueue = queues.get(currentSearchDirection);
                 BoardSpace disk; //Assign later after out-of-bounds check
 
-                if (model.isOutOfBounds(coordinate.getX(), coordinate.getY()))
+                if (model.isOutOfBounds(coordinate))
                 {
                     relevantQueue.clear(); //Finished by board ending
                     break; //Reached end of board - first search complete condition
                 }
-                disk = model.getDisk(coordinate.getX(), coordinate.getY());
+                disk = model.getDisk(coordinate);
                 if (disk.getCurrentState() == player.getPlayersDisk().oppositeState())
                 {
                     //Add this co-ordinate to queue as it's ready to flip & continue search
@@ -80,7 +80,7 @@ public class FlipQueue
 
     public Collection<DiskCoordinate> getAllQueueCoordinates()
     {
-        Collection<DiskCoordinate> allCoordinates = new ArrayDeque();
+        Collection<DiskCoordinate> allCoordinates = new ArrayDeque<>();
         for (Queue<DiskCoordinate> queue : queues.values())
         {
             allCoordinates.addAll(queue);

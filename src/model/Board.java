@@ -10,7 +10,7 @@ import static model.BoardSpaceState.*;
 public class Board implements ModelInterface
 {
     private ControllerInterface controller;
-    private BoardSpace[][] board;
+    private final BoardSpace[][] board;
 
     public Board()
     {
@@ -30,11 +30,11 @@ public class Board implements ModelInterface
     {
         final int halfBoardSize = (BOARDSIZE / 2) + 1;
 
-        addDisk(halfBoardSize, halfBoardSize, WHITE);
-        addDisk(halfBoardSize - 1, halfBoardSize - 1, WHITE);
+        addDisk(new DiskCoordinate(halfBoardSize, halfBoardSize), WHITE);
+        addDisk(new DiskCoordinate(halfBoardSize - 1, halfBoardSize - 1), WHITE);
 
-        addDisk(halfBoardSize - 1, halfBoardSize, BLACK);
-        addDisk(halfBoardSize, halfBoardSize - 1, BLACK);
+        addDisk(new DiskCoordinate(halfBoardSize - 1, halfBoardSize), BLACK);
+        addDisk(new DiskCoordinate(halfBoardSize, halfBoardSize - 1), BLACK);
     }
 
     @Override
@@ -44,13 +44,14 @@ public class Board implements ModelInterface
     }
 
     @Override
-    public void addDisk(int X, int Y, BoardSpaceState colour)
+    public void addDisk(DiskCoordinate coordinate, BoardSpaceState colour)
     {
-        if (isOutOfBounds(X, Y))
+        int X = coordinate.getX(), Y = coordinate.getY();
+        if (isOutOfBounds(coordinate))
         {
             throw new OutOfBoundsException(X, Y);
         }
-        else if (doesDiskExist(X, Y))
+        else if (doesDiskExist(coordinate))
         {
             throw new DiskAlreadyExistsException(X, Y);
         }
@@ -62,18 +63,15 @@ public class Board implements ModelInterface
 
     /**
      * Gets the disk object for the specified coordinate
-     * WARNING: Calling functions should check with either doesDiskExist
-     * before calling this method or check for null value from this method
-     * before operating on returned Disk object!
      *
-     * @param X
-     * @param Y
+     * @param coordinate the X,Y position of the disk
      * @return null if no disk at position specified, Disk object otherwise
      */
     @Override
-    public BoardSpace getDisk(int X, int Y)
+    public BoardSpace getDisk(DiskCoordinate coordinate)
     {
-        if (isOutOfBounds(X, Y))
+        int X = coordinate.getX(), Y = coordinate.getY();
+        if (isOutOfBounds(coordinate))
         {
             throw new OutOfBoundsException(X, Y);
         }
@@ -84,8 +82,9 @@ public class Board implements ModelInterface
     }
 
     @Override
-    public boolean doesDiskExist(int X, int Y)
+    public boolean doesDiskExist(DiskCoordinate coordinate)
     {
+        int X = coordinate.getX(), Y = coordinate.getY();
         return board[X - 1][Y - 1].getCurrentState() != EMPTY;
     }
 
@@ -96,7 +95,7 @@ public class Board implements ModelInterface
         {
             for (int j = 1; j <= board[0].length; j++)
             {
-                if (!doesDiskExist(i,j))
+                if (!doesDiskExist(new DiskCoordinate(i, j)))
                 {
                     return false;
                 }
@@ -106,8 +105,9 @@ public class Board implements ModelInterface
     }
 
     @Override
-    public boolean isOutOfBounds(int X, int Y)
+    public boolean isOutOfBounds(DiskCoordinate coordinate)
     {
+        int X = coordinate.getX(), Y = coordinate.getY();
         return (X <= 0 || X > BOARDSIZE || Y <= 0 || Y > BOARDSIZE);
     }
 

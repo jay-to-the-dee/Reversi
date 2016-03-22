@@ -11,10 +11,10 @@ public interface ModelInterface
     public final static int BOARDSIZE = 8;
 
     public void setController(ControllerInterface controller);
-    public void addDisk(int X, int Y, BoardSpaceState colour);
-    public BoardSpace getDisk(int X, int Y);
-    public boolean doesDiskExist(int X, int Y);
+    public void addDisk(DiskCoordinate coordinate, BoardSpaceState colour);
+    public BoardSpace getDisk(DiskCoordinate coordinate);
+    public boolean doesDiskExist(DiskCoordinate coordinate);
     public boolean isBoardFull();
     
-   public boolean isOutOfBounds(int x, int y);
+   public boolean isOutOfBounds(DiskCoordinate coordinate);
 }

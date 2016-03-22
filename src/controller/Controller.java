@@ -63,7 +63,7 @@ public class Controller implements ControllerInterface
     }
 
     @Override
-    public synchronized void recievePlayerDiskAdd(int X, int Y, PlayerEnum player)
+    public synchronized void recievePlayerDiskAdd(DiskCoordinate coordinate, PlayerEnum player)
     {
         try
         {
@@ -71,12 +71,12 @@ public class Controller implements ControllerInterface
             {
                 throw new WrongPlayerException(player);
             }
-            FlipQueue flipQueue = new FlipQueue(model, new DiskCoordinate(X, Y), player);
+            FlipQueue flipQueue = new FlipQueue(model, coordinate, player);
             if (flipQueue.getTotalFlipCount() == 0)
             {
                 throw new NoDisksCapturedException(player);
             }
-            model.addDisk(X, Y, player.getPlayersDisk());
+            model.addDisk(coordinate, player.getPlayersDisk());
             addFlipQueue(flipQueue);
             this.notifyAll();
             view.updateCurrentPlayer(currentPlayer); //TODO: Better way to refresh GUI?
@@ -92,7 +92,7 @@ public class Controller implements ControllerInterface
     {
         for (DiskCoordinate coordinate : flipQueue.getAllQueueCoordinates())
         {
-            model.getDisk(coordinate.getX(), coordinate.getY()).flipDisk();
+            model.getDisk(coordinate).flipDisk();
         }
     }
 

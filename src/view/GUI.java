@@ -14,6 +14,7 @@ public class GUI implements ViewInterface
     private GameFrame whitePlayer;
     private GameFrame blackPlayer;
 
+    @Override
     public void setController(ControllerInterface controller)
     {
         this.controller = controller;
@@ -35,6 +36,7 @@ public class GUI implements ViewInterface
         }
     }
 
+    @Override
     public void updateCurrentPlayer(PlayerEnum currentPlayer)
     {
         boolean whiteCurrentlyInControl = false;
