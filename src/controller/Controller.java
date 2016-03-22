@@ -71,10 +71,15 @@ public class Controller implements ControllerInterface
             {
                 throw new WrongPlayerException(player);
             }
-            
+            FlipQueue flipQueue = new FlipQueue(model, new DiskCoordinate(X, Y), player);
+            if (flipQueue.getTotalFlipCount() == 0)
+            {
+                throw new NoDisksCapturedException(player);
+            }
             model.addDisk(X, Y, player.getPlayersDisk());
-            this.notify();
-            view.updateCurrentPlayer(currentPlayer);
+            addFlipQueue(flipQueue);
+            this.notifyAll();
+            view.updateCurrentPlayer(currentPlayer); //TODO: Better way to refresh GUI?
         }
         catch (ModelException | ControllerException e)
         {
@@ -83,11 +88,27 @@ public class Controller implements ControllerInterface
 
     }
 
+    private void addFlipQueue(FlipQueue flipQueue)
+    {
+        for (DiskCoordinate coordinate : flipQueue.getAllQueueCoordinates())
+        {
+            model.getDisk(coordinate.getX(), coordinate.getY()).flipDisk();
+        }
+    }
+
     private static class WrongPlayerException extends ControllerException
     {
         public WrongPlayerException(PlayerEnum player)
         {
             super("Not currently " + player.toString().toLowerCase() + " players turn!");
+        }
+    }
+
+    private static class NoDisksCapturedException extends ControllerException
+    {
+        public NoDisksCapturedException(PlayerEnum player)
+        {
+            super("Cannot place disk here, as it doesn't capture any " + player.oppositePlayer().toString().toLowerCase() + " disks.");
         }
     }
 

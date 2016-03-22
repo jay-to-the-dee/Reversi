@@ -89,6 +89,7 @@ public class Board implements ModelInterface
         return board[X - 1][Y - 1].getCurrentState() != EMPTY;
     }
 
+    @Override
     public boolean isBoardFull()
     {
         for (int i = 1; i <= board.length; i++)
@@ -104,7 +105,8 @@ public class Board implements ModelInterface
         return true;
     }
 
-    public static boolean isOutOfBounds(int X, int Y)
+    @Override
+    public boolean isOutOfBounds(int X, int Y)
     {
         return (X <= 0 || X > BOARDSIZE || Y <= 0 || Y > BOARDSIZE);
     }

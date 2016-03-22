@@ -15,4 +15,6 @@ public interface ModelInterface
     public BoardSpace getDisk(int X, int Y);
     public boolean doesDiskExist(int X, int Y);
     public boolean isBoardFull();
+    
+   public boolean isOutOfBounds(int x, int y);
 }
