@@ -62,16 +62,33 @@ public class Controller implements ControllerInterface
         JOptionPane.showMessageDialog(null, "Game over - TODO WINNER HERE", "Game over!", JOptionPane.INFORMATION_MESSAGE);
     }
 
-    public void recievePlayerDiskAdd(int X, int Y, PlayerEnum player)
+    @Override
+    public synchronized void recievePlayerDiskAdd(int X, int Y, PlayerEnum player)
     {
         try
         {
+            if (player != currentPlayer)
+            {
+                throw new WrongPlayerException(player);
+            }
+            
             model.addDisk(X, Y, player.getPlayersDisk());
+            this.notify();
+            view.updateCurrentPlayer(currentPlayer);
         }
-        catch (ModelException e) //TODO: Controller exceptions should be handled here too
+        catch (ModelException | ControllerException e)
         {
             JOptionPane.showMessageDialog(null, e.getMessage(), "Invalid move", JOptionPane.WARNING_MESSAGE);
         }
-        view.updateCurrentPlayer(currentPlayer);
+
     }
+
+    private static class WrongPlayerException extends ControllerException
+    {
+        public WrongPlayerException(PlayerEnum player)
+        {
+            super("Not currently " + player.toString().toLowerCase() + " players turn!");
+        }
+    }
+
 }
