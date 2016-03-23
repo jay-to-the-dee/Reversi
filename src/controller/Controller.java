@@ -1,5 +1,6 @@
 package controller;
 
+import java.util.*;
 import javax.swing.JOptionPane;
 import model.*;
 import static model.ModelInterface.BOARDSIZE;
@@ -97,8 +98,7 @@ public class Controller implements ControllerInterface
     @Override
     public DiskCoordinate doGreedyAISearch(PlayerEnum player)
     {
-        DiskCoordinate bestCoordinate = null;
-        int bestCount = 0;
+        TreeMap<Integer, Set<DiskCoordinate>> searchMap = new TreeMap<>();
 
         for (int i = 1; i <= BOARDSIZE; i++)
         {
@@ -109,16 +109,18 @@ public class Controller implements ControllerInterface
                 {
                     continue;
                 }
-
                 int currentCount = new FlipQueue(model, currentCoordinate, player).getTotalFlipCount();
-                if (currentCount > bestCount)
+                Set<DiskCoordinate> set = searchMap.get(currentCount);
+                if (set == null)
                 {
-                    bestCoordinate = currentCoordinate;
+                    searchMap.put(currentCount, set = new HashSet<>());
                 }
+                set.add(currentCoordinate);
             }
         }
-        return bestCoordinate;
-    }
+
+        return searchMap.lastEntry().getValue().iterator().next();
+    }   
 
     private static class WrongPlayerException extends ControllerException
     {
