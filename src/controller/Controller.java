@@ -2,6 +2,7 @@ package controller;
 
 import javax.swing.JOptionPane;
 import model.*;
+import static model.ModelInterface.BOARDSIZE;
 import view.*;
 
 /**
@@ -46,14 +47,12 @@ public class Controller implements ControllerInterface
             currentPlayer = currentPlayer.oppositePlayer();
             view.updateCurrentPlayer(currentPlayer);
 
-            //We're waiting for user to place disk here here
             try
             {
-                this.wait();
+                this.wait(); //We're waiting for user to place disk here here
             }
             catch (InterruptedException ex)
             {
-                //Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         while (!model.isBoardFull());
@@ -85,7 +84,6 @@ public class Controller implements ControllerInterface
         {
             JOptionPane.showMessageDialog(null, e.getMessage(), "Invalid move", JOptionPane.WARNING_MESSAGE);
         }
-
     }
 
     private void addFlipQueue(FlipQueue flipQueue)
@@ -94,6 +92,32 @@ public class Controller implements ControllerInterface
         {
             model.getDisk(coordinate).flipDisk();
         }
+    }
+
+    @Override
+    public DiskCoordinate doGreedyAISearch(PlayerEnum player)
+    {
+        DiskCoordinate bestCoordinate = null;
+        int bestCount = 0;
+
+        for (int i = 1; i <= BOARDSIZE; i++)
+        {
+            for (int j = 1; j <= BOARDSIZE; j++)
+            {
+                DiskCoordinate currentCoordinate = new DiskCoordinate(j, i);
+                if (model.doesDiskExist(currentCoordinate))
+                {
+                    continue;
+                }
+
+                int currentCount = new FlipQueue(model, currentCoordinate, player).getTotalFlipCount();
+                if (currentCount > bestCount)
+                {
+                    bestCoordinate = currentCoordinate;
+                }
+            }
+        }
+        return bestCoordinate;
     }
 
     private static class WrongPlayerException extends ControllerException

@@ -2,7 +2,10 @@ package view;
 
 import controller.ControllerInterface;
 import java.awt.*;
+import java.awt.event.*;
+import java.util.concurrent.ExecutionException;
 import javax.swing.*;
+import model.DiskCoordinate;
 import static view.PlayerEnum.*;
 
 /**
@@ -45,8 +48,8 @@ class GameFrame
         contentPane.add(gamePanel, BorderLayout.CENTER);
 
         AIButton = new JButton("Greedy AI (Play " + player + ")");
+        AIButton.addActionListener(new AIButtonActionListener());
         contentPane.add(AIButton, BorderLayout.SOUTH);
-
     }
 
     private void setFrameLocation()
@@ -82,4 +85,43 @@ class GameFrame
         }
         frame.repaint();
     }
+
+    private class AIButtonActionListener implements ActionListener
+    {
+        @Override
+        public void actionPerformed(ActionEvent e)
+        {
+            SwingWorker swingWorker = new SwingWorker<DiskCoordinate, Void>()
+            {
+                @Override
+                protected DiskCoordinate doInBackground() throws Exception
+                {
+                    return controller.doGreedyAISearch(player);
+                }
+
+                @Override
+                protected void done()
+                {
+                    try
+                    {
+                        DiskCoordinate bestCoordinate = get();
+                        if (bestCoordinate != null)
+                        {
+                            controller.recievePlayerDiskAdd(bestCoordinate, player);
+                        }
+                        else
+                        {
+                            throw new ExecutionException("Couldn't find any capturing moves!", null);
+                        }
+                    }
+                    catch (InterruptedException | ExecutionException ex)
+                    {
+                        JOptionPane.showMessageDialog(frame, ex, "Error in search", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+            };
+            swingWorker.execute();
+        }
+    }
+
 }
