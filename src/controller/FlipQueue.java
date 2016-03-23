@@ -38,7 +38,7 @@ public class FlipQueue
     {
         for (SearchDirectionsEnum currentSearchDirection : SearchDirectionsEnum.values())
         {
-            for (int i = 1; i < BOARDSIZE; i++)
+            for (int i = 1; i <= BOARDSIZE; i++)
             {
                 DiskCoordinate coordinate = currentSearchDirection.getCoordinate(startingDisk, i);
                 Queue<DiskCoordinate> relevantQueue = queues.get(currentSearchDirection);
