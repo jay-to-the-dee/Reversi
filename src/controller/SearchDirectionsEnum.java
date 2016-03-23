@@ -23,28 +23,28 @@ enum SearchDirectionsEnum
 
         switch (this)
         {
-            case WEST:
+            case NORTH:
                 newY -= distanceFromStart;
                 break;
-            case SOUTH_WEST:
+            case NORTH_EAST:
                 newY -= distanceFromStart;
                 newX += distanceFromStart;
                 break;
-            case SOUTH:
+            case EAST:
                 newX += distanceFromStart;
                 break;
             case SOUTH_EAST:
                 newX += distanceFromStart;
                 newY += distanceFromStart;
                 break;
-            case EAST:
+            case SOUTH:
                 newY += distanceFromStart;
                 break;
-            case NORTH_EAST:
+            case SOUTH_WEST:
                 newX -= distanceFromStart;
                 newY += distanceFromStart;
                 break;
-            case NORTH:
+            case WEST:
                 newX -= distanceFromStart;
                 break;
             case NORTH_WEST:

@@ -29,9 +29,9 @@ class BoardPanel extends JPanel
         this.setBackground(Color.BLACK);
         this.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1, true));
 
-        for (int x = 1; x <= ModelInterface.BOARDSIZE; x++)
+        for (int y = 1; y <= ModelInterface.BOARDSIZE; y++)
         {
-            for (int y = 1; y <= ModelInterface.BOARDSIZE; y++)
+            for (int x = 1; x <= ModelInterface.BOARDSIZE; x++)
             {
                 BoardSpacePanel panel; //TODO: Do we need our panels[i][j] reference?
                 DiskCoordinate modelCoordinate;

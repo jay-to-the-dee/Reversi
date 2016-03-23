@@ -57,7 +57,7 @@ public class Board implements ModelInterface
         }
         else
         {
-            board[X - 1][Y - 1].setCurrentState(colour);
+            board[Y - 1][X - 1].setCurrentState(colour);
         }
     }
 
@@ -77,7 +77,7 @@ public class Board implements ModelInterface
         }
         else
         {
-            return board[X - 1][Y - 1];
+            return board[Y - 1][X - 1];
         }
     }
 
@@ -85,7 +85,7 @@ public class Board implements ModelInterface
     public boolean doesDiskExist(DiskCoordinate coordinate)
     {
         int X = coordinate.getX(), Y = coordinate.getY();
-        return board[X - 1][Y - 1].getCurrentState() != EMPTY;
+        return board[Y - 1][X - 1].getCurrentState() != EMPTY;
     }
 
     @Override
@@ -95,7 +95,7 @@ public class Board implements ModelInterface
         {
             for (int j = 1; j <= board[0].length; j++)
             {
-                if (!doesDiskExist(new DiskCoordinate(i, j)))
+                if (!doesDiskExist(new DiskCoordinate(j, i)))
                 {
                     return false;
                 }
