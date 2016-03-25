@@ -14,7 +14,7 @@ public interface ModelInterface
     public void addDisk(DiskCoordinate coordinate, BoardSpaceState colour);
     public BoardSpace getDisk(DiskCoordinate coordinate);
     public boolean doesDiskExist(DiskCoordinate coordinate);
-    public boolean isBoardFull();
+    public WhiteBlackCount getDisksCount();
     
-   public boolean isOutOfBounds(DiskCoordinate coordinate);
+    public boolean isOutOfBounds(DiskCoordinate coordinate);
 }

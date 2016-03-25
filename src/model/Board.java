@@ -89,19 +89,27 @@ public class Board implements ModelInterface
     }
 
     @Override
-    public boolean isBoardFull()
+    public WhiteBlackCount getDisksCount()
     {
+        int whiteCount = 0;
+        int blackCount = 0;
+
         for (int i = 1; i <= board.length; i++)
         {
             for (int j = 1; j <= board[0].length; j++)
             {
-                if (!doesDiskExist(new DiskCoordinate(j, i)))
+                switch (getDisk(new DiskCoordinate(j, i)).getCurrentState())
                 {
-                    return false;
+                    case WHITE:
+                        whiteCount++;
+                        break;
+                    case BLACK:
+                        blackCount++;
+                        break;
                 }
             }
         }
-        return true;
+        return new WhiteBlackCount(whiteCount, blackCount);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package controller;
 
+import model.WhiteBlackCount;
 import java.util.*;
 import javax.swing.JOptionPane;
 import model.*;
@@ -43,6 +44,7 @@ public class Controller implements ControllerInterface
     @Override
     public synchronized void mainGameLoop()
     {
+        WhiteBlackCount currentWBCount;
         do
         {
             currentPlayer = currentPlayer.oppositePlayer();
@@ -55,11 +57,19 @@ public class Controller implements ControllerInterface
             catch (InterruptedException ex)
             {
             }
+            currentWBCount = model.getDisksCount();
         }
-        while (!model.isBoardFull());
+        while (currentWBCount.getTotalCount() != Math.pow(BOARDSIZE, 2));
 
-        //TODO: Game has ended here - report winner etc.
-        JOptionPane.showMessageDialog(null, "Game over - TODO WINNER HERE", "Game over!", JOptionPane.INFORMATION_MESSAGE);
+        doGameOverSequence(currentWBCount); //Game has ended when loop method reaches here
+    }
+
+    private void doGameOverSequence(WhiteBlackCount currentWBCount)
+    {
+        JOptionPane.showMessageDialog(null, "Game over - " + currentWBCount.getWinnerString() + "! "
+                + currentWBCount.getRatioString(),
+                "Game over!",
+                JOptionPane.INFORMATION_MESSAGE);
     }
 
     @Override
@@ -120,7 +130,7 @@ public class Controller implements ControllerInterface
         }
 
         return searchMap.lastEntry().getValue().iterator().next();
-    }   
+    }
 
     private static class WrongPlayerException extends ControllerException
     {
@@ -137,5 +147,4 @@ public class Controller implements ControllerInterface
             super("Cannot place disk here, as it doesn't capture any " + player.oppositePlayer().toString().toLowerCase() + " disks.");
         }
     }
-
 }
