@@ -1,10 +1,9 @@
 package controller;
 
-import model.WhiteBlackCount;
 import java.util.*;
 import javax.swing.JOptionPane;
-import model.*;
 import static model.ModelInterface.BOARDSIZE;
+import model.*;
 import view.*;
 
 /**
@@ -17,6 +16,8 @@ public class Controller implements ControllerInterface
     ViewInterface view;
 
     private PlayerEnum currentPlayer;
+    private WhiteBlackCount currentWBCount;
+    private TreeMap<Integer, Set<DiskCoordinate>> searchMap;
 
     public Controller(ModelInterface model, ViewInterface view)
     {
@@ -44,24 +45,29 @@ public class Controller implements ControllerInterface
     @Override
     public synchronized void mainGameLoop()
     {
-        WhiteBlackCount currentWBCount;
         do
         {
-            currentPlayer = currentPlayer.oppositePlayer();
-            view.updateCurrentPlayer(currentPlayer);
+            searchMap = getSearchMap(currentPlayer.oppositePlayer());
+            if (searchMap.lastKey() != 0) //Only switch player if they'll be able to play a legal move
+            {
+                currentPlayer = currentPlayer.oppositePlayer();
+                view.updateCurrentPlayer(currentPlayer);
+            }
 
-            try
-            {
-                this.wait(); //We're waiting for user to place disk here here
-            }
-            catch (InterruptedException ex)
-            {
-            }
+            waitForUserToPlaceDisk(); //basically this.wait() neatened
+
             currentWBCount = model.getDisksCount();
         }
-        while (currentWBCount.getTotalCount() != Math.pow(BOARDSIZE, 2));
+        while (gameContinuationConditions(currentWBCount));
 
         doGameOverSequence(currentWBCount); //Game has ended when loop method reaches here
+    }
+
+    private static boolean gameContinuationConditions(WhiteBlackCount currentWBCount)
+    {
+        return currentWBCount.getTotalCount() != Math.pow(BOARDSIZE, 2) //Board full
+                && currentWBCount.getBlackCount() != 0  //Deal with condition where no opposition disks left 
+                && currentWBCount.getWhiteCount() != 0; //Ditto
     }
 
     private void doGameOverSequence(WhiteBlackCount currentWBCount)
@@ -70,6 +76,17 @@ public class Controller implements ControllerInterface
                 + currentWBCount.getRatioString(),
                 "Game over!",
                 JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    private synchronized void waitForUserToPlaceDisk()
+    {
+        try
+        {
+            this.wait(); //We're waiting for user to place disk here here
+        }
+        catch (InterruptedException ex)
+        {
+        }
     }
 
     @Override
@@ -108,7 +125,13 @@ public class Controller implements ControllerInterface
     @Override
     public DiskCoordinate doGreedyAISearch(PlayerEnum player)
     {
-        TreeMap<Integer, Set<DiskCoordinate>> searchMap = new TreeMap<>();
+        ///This is so easy when we already have our search-map ready stored!
+        return searchMap.lastEntry().getValue().iterator().next();
+    }
+
+    private TreeMap<Integer, Set<DiskCoordinate>> getSearchMap(PlayerEnum player)
+    {
+        TreeMap<Integer, Set<DiskCoordinate>> newSearchMap = new TreeMap<>();
 
         for (int i = 1; i <= BOARDSIZE; i++)
         {
@@ -120,16 +143,16 @@ public class Controller implements ControllerInterface
                     continue;
                 }
                 int currentCount = new FlipQueue(model, currentCoordinate, player).getTotalFlipCount();
-                Set<DiskCoordinate> set = searchMap.get(currentCount);
+                Set<DiskCoordinate> set = newSearchMap.get(currentCount);
                 if (set == null)
                 {
-                    searchMap.put(currentCount, set = new HashSet<>());
+                    newSearchMap.put(currentCount, set = new HashSet<>());
                 }
                 set.add(currentCoordinate);
             }
         }
 
-        return searchMap.lastEntry().getValue().iterator().next();
+        return newSearchMap;
     }
 
     private static class WrongPlayerException extends ControllerException
@@ -147,4 +170,5 @@ public class Controller implements ControllerInterface
             super("Cannot place disk here, as it doesn't capture any " + player.oppositePlayer().toString().toLowerCase() + " disks.");
         }
     }
+
 }
