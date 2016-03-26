@@ -68,6 +68,11 @@ public class FlipQueue
         }
     }
 
+    public DiskCoordinate getStartingDisk()
+    {
+        return startingDisk;
+    }
+
     public int getTotalFlipCount()
     {
         int count = 0;

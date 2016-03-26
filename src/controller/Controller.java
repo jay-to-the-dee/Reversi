@@ -17,7 +17,7 @@ public class Controller implements ControllerInterface
 
     private PlayerEnum currentPlayer;
     private WhiteBlackCount currentWBCount;
-    private TreeMap<Integer, Set<DiskCoordinate>> searchMap;
+    private TreeMap<Integer, Set<FlipQueue>> searchMap;
 
     public Controller(ModelInterface model, ViewInterface view)
     {
@@ -126,12 +126,12 @@ public class Controller implements ControllerInterface
     public DiskCoordinate doGreedyAISearch(PlayerEnum player)
     {
         ///This is so easy when we already have our search-map ready stored!
-        return searchMap.lastEntry().getValue().iterator().next();
+        return searchMap.lastEntry().getValue().iterator().next().getStartingDisk();
     }
 
-    private TreeMap<Integer, Set<DiskCoordinate>> getSearchMap(PlayerEnum player)
+    private TreeMap<Integer, Set<FlipQueue>> getSearchMap(PlayerEnum player)
     {
-        TreeMap<Integer, Set<DiskCoordinate>> newSearchMap = new TreeMap<>();
+        TreeMap<Integer, Set<FlipQueue>> newSearchMap = new TreeMap<>();
 
         for (int i = 1; i <= BOARDSIZE; i++)
         {
@@ -142,13 +142,14 @@ public class Controller implements ControllerInterface
                 {
                     continue;
                 }
-                int currentCount = new FlipQueue(model, currentCoordinate, player).getTotalFlipCount();
-                Set<DiskCoordinate> set = newSearchMap.get(currentCount);
+                FlipQueue flipQueue = new FlipQueue(model, currentCoordinate, player);
+                int currentCount = flipQueue.getTotalFlipCount();
+                Set<FlipQueue> set = newSearchMap.get(currentCount);
                 if (set == null)
                 {
                     newSearchMap.put(currentCount, set = new HashSet<>());
                 }
-                set.add(currentCoordinate);
+                set.add(flipQueue);
             }
         }
 
