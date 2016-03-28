@@ -12,12 +12,14 @@ import view.PlayerEnum;
 class SearchMap
 {
     private TreeMap<Integer, Set<FlipQueue>> searchMap;
+    private HashMap<DiskCoordinate, FlipQueue> flipQueueCache;
     private PlayerEnum player;
 
     public SearchMap(ModelInterface model, PlayerEnum player)
     {
-        searchMap = new TreeMap<>();
         this.player = player;
+        searchMap = new TreeMap<>();
+        flipQueueCache = new HashMap<>();
 
         for (int i = 1; i <= BOARDSIZE; i++)
         {
@@ -36,6 +38,8 @@ class SearchMap
                     searchMap.put(currentCount, set = new HashSet<>());
                 }
                 set.add(flipQueue);
+
+                flipQueueCache.put(currentCoordinate, flipQueue);
             }
         }
     }
@@ -54,6 +58,11 @@ class SearchMap
         ///This is so easy when we already have our search-map ready stored!
         return searchMap.lastEntry().getValue().iterator().next().getStartingDisk();
         //}
+    }
+    
+    public FlipQueue getCachedFlipQueue(DiskCoordinate coordinate)
+    {
+        return flipQueueCache.get(coordinate);
     }
 
     public PlayerEnum getPlayer()
