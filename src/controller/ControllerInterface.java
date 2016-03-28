@@ -14,5 +14,5 @@ public interface ControllerInterface
     
     public void mainGameLoop();
     public void recievePlayerDiskAdd(DiskCoordinate coordinate, PlayerEnum player);
-    public DiskCoordinate doGreedyAISearch(PlayerEnum player);
+    public DiskCoordinate doGreedyAISearch();
 }

@@ -96,7 +96,7 @@ class GameFrame
                 @Override
                 protected DiskCoordinate doInBackground() throws Exception
                 {
-                    return controller.doGreedyAISearch(player);
+                    return controller.doGreedyAISearch();
                 }
 
                 @Override

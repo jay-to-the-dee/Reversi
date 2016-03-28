@@ -1,6 +1,5 @@
 package controller;
 
-import java.util.*;
 import javax.swing.JOptionPane;
 import static model.ModelInterface.BOARDSIZE;
 import model.*;
@@ -16,8 +15,8 @@ public class Controller implements ControllerInterface
     ViewInterface view;
 
     private PlayerEnum currentPlayer;
+    private SearchMap searchMap;
     private WhiteBlackCount currentWBCount;
-    private TreeMap<Integer, Set<FlipQueue>> searchMap;
 
     public Controller(ModelInterface model, ViewInterface view)
     {
@@ -47,8 +46,8 @@ public class Controller implements ControllerInterface
     {
         do
         {
-            searchMap = getSearchMap(currentPlayer.oppositePlayer());
-            if (searchMap.lastKey() != 0) //Only switch player if they'll be able to play a legal move
+            searchMap = new SearchMap(model, currentPlayer.oppositePlayer());
+            if (searchMap.canPlayLegalMove()) //Only switch player if they'll be able to play a legal move
             {
                 currentPlayer = currentPlayer.oppositePlayer();
                 view.updateCurrentPlayer(currentPlayer);
@@ -123,37 +122,9 @@ public class Controller implements ControllerInterface
     }
 
     @Override
-    public DiskCoordinate doGreedyAISearch(PlayerEnum player)
+    public DiskCoordinate doGreedyAISearch()
     {
-        ///This is so easy when we already have our search-map ready stored!
-        return searchMap.lastEntry().getValue().iterator().next().getStartingDisk();
-    }
-
-    private TreeMap<Integer, Set<FlipQueue>> getSearchMap(PlayerEnum player)
-    {
-        TreeMap<Integer, Set<FlipQueue>> newSearchMap = new TreeMap<>();
-
-        for (int i = 1; i <= BOARDSIZE; i++)
-        {
-            for (int j = 1; j <= BOARDSIZE; j++)
-            {
-                DiskCoordinate currentCoordinate = new DiskCoordinate(j, i);
-                if (model.doesDiskExist(currentCoordinate))
-                {
-                    continue;
-                }
-                FlipQueue flipQueue = new FlipQueue(model, currentCoordinate, player);
-                int currentCount = flipQueue.getTotalFlipCount();
-                Set<FlipQueue> set = newSearchMap.get(currentCount);
-                if (set == null)
-                {
-                    newSearchMap.put(currentCount, set = new HashSet<>());
-                }
-                set.add(flipQueue);
-            }
-        }
-
-        return newSearchMap;
+        return searchMap.doGreedyAISearch();
     }
 
     private static class WrongPlayerException extends ControllerException
