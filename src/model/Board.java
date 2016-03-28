@@ -49,11 +49,11 @@ public class Board implements ModelInterface
         int X = coordinate.getX(), Y = coordinate.getY();
         if (isOutOfBounds(coordinate))
         {
-            throw new OutOfBoundsException(X, Y);
+            throw new OutOfBoundsException(coordinate);
         }
         else if (doesDiskExist(coordinate))
         {
-            throw new DiskAlreadyExistsException(X, Y);
+            throw new DiskAlreadyExistsException(coordinate);
         }
         else
         {
@@ -73,7 +73,7 @@ public class Board implements ModelInterface
         int X = coordinate.getX(), Y = coordinate.getY();
         if (isOutOfBounds(coordinate))
         {
-            throw new OutOfBoundsException(X, Y);
+            throw new OutOfBoundsException(coordinate);
         }
         else
         {
@@ -137,17 +137,17 @@ public class Board implements ModelInterface
 
     private class DiskAlreadyExistsException extends ModelException
     {
-        public DiskAlreadyExistsException(int X, int Y)
+        public DiskAlreadyExistsException(DiskCoordinate coordinate)
         {
-            super("Disk already exists at position (" + X + "," + Y + ")!");
+            super("Disk already exists at position " + coordinate.toString() + "!");
         }
     }
 
     private class OutOfBoundsException extends ModelException
     {
-        public OutOfBoundsException(int X, int Y)
+        public OutOfBoundsException(DiskCoordinate coordinate)
         {
-            super("Co-ordinates (" + X + "," + Y + ") are outside the grid boundary!");
+            super("Co-ordinates " + coordinate.toString() + " are outside the grid boundary!");
         }
     }
 
