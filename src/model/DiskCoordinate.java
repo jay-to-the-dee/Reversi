@@ -7,7 +7,7 @@ import static model.ModelInterface.BOARDSIZE;
  *
  * @author jay-to-the-dee <jay-to-the-dee@users.noreply.github.com>
  */
-public class DiskCoordinate
+public final class DiskCoordinate
 {
     private final int X;
     private final int Y;

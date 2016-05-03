@@ -52,8 +52,13 @@ public class Controller implements ControllerInterface
                 currentPlayer = currentPlayer.oppositePlayer();
                 view.updateCurrentPlayer(currentPlayer);
             }
+            else if (!new SearchMap(model, currentPlayer).canPlayLegalMove())
+            {
+                break;
+            }
 
             waitForUserToPlaceDisk(); //basically this.wait() neatened
+            searchMap = null;
 
             currentWBCount = model.getDisksCount();
         }
@@ -65,7 +70,7 @@ public class Controller implements ControllerInterface
     private static boolean gameContinuationConditions(WhiteBlackCount currentWBCount)
     {
         return currentWBCount.getTotalCount() != Math.pow(BOARDSIZE, 2) //Board full
-                && currentWBCount.getBlackCount() != 0  //Deal with condition where no opposition disks left 
+                && currentWBCount.getBlackCount() != 0 //Deal with condition where no opposition disks left 
                 && currentWBCount.getWhiteCount() != 0; //Ditto
     }
 
@@ -97,7 +102,14 @@ public class Controller implements ControllerInterface
             {
                 throw new WrongPlayerException(player);
             }
-            FlipQueue flipQueue = new FlipQueue(model, coordinate, player);
+            FlipQueue flipQueue;
+            do
+            {
+                flipQueue = searchMap.getCachedFlipQueue(coordinate); //How do we wait for this to make sure our most recent searchMap exists?
+                //FlipQueue flipQueue = new FlipQueue(model, coordinate, player);
+            }
+            while (flipQueue == null);
+
             if (flipQueue.getTotalFlipCount() == 0)
             {
                 throw new NoDisksCapturedException(player);
@@ -122,7 +134,7 @@ public class Controller implements ControllerInterface
     }
 
     @Override
-    public DiskCoordinate doGreedyAISearch()
+    public synchronized DiskCoordinate doGreedyAISearch()
     {
         return searchMap.doGreedyAISearch();
     }
